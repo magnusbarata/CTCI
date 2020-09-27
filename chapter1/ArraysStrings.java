@@ -1,6 +1,10 @@
 import java.util.Arrays;
 
 public class ArraysStrings {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    static final String EQL_STR = " must be equal to ";
+
     /* 1-1 */
     static boolean isUniqueChars(String str) {
         if (str.length() > 128) return false;
@@ -18,7 +22,7 @@ public class ArraysStrings {
     /* 1-2 */
     private static String sortString(String str) {
         char[] charArr = str.toCharArray();
-        java.util.Arrays.sort(charArr);
+        Arrays.sort(charArr);
         return new String(charArr);
     }
 
@@ -174,19 +178,19 @@ public class ArraysStrings {
         assert isUniqueChars("abcdef") : "'abcdef' is unique";
         assert !isUniqueChars("aa") : "'aa' is not unique";
         assert !isUniqueChars("abcc") : "'abcc' is not unique";
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
         System.out.print("1-2: ");
         assert checkPermutation("abc", "cba") : "'cba' is 'abc' permutation";
         assert !checkPermutation("abc", "def") : "'def' is not 'abc' permutation";
         assert !checkPermutation("abc", "cbad") : "'cbad' is not 'abc' permutation";
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
         System.out.print("1-3: ");
         char[] testString = "Mr John Smith    ".toCharArray();
         urlify(testString, 13);
         assert (new String(testString)).equals("Mr%20John%20Smith") : "result must equals to 'Mr%20John%20Smith'";
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
         System.out.print("1-4: ");
         assert isPermutationOfPalindrome("Tact Coa") : "'Tact Coa' is a permutation of a palindrome";
@@ -196,21 +200,20 @@ public class ArraysStrings {
         assert isPermutationOfPalindrome("carerac") : "'carerac' is a permutation of a palindrome";
         assert isPermutationOfPalindrome("abab") : "'abab' is a permutation of a palindrome";
         assert isPermutationOfPalindrome("tactcoapapa") : "'tactcoapapa' is a permutation of a palindrome";
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
         System.out.print("1-5: ");
         assert checkLessThanOneEdit("pale", "ple") : "'pale' and 'ple' is one edit away";
         assert checkLessThanOneEdit("pales", "pale") : "'pales' and 'pale' is one edit away";
         assert checkLessThanOneEdit("pale", "bale") : "'pale' and 'bale' is one edit away";
         assert !checkLessThanOneEdit("pale", "bake") : "'pale' and 'bake' is more than one edit away";
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
         System.out.print("1-6: ");
         assert compressString("aabcccccaaa").equals("a2b1c5a3") : "'aabcccccaaa' will be compressed into 'a2b1c5a3'";
         assert compressString("aa").equals("aa") : "'aa' will be compressed into 'aa'";
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
-        final String EQL_STR = " must be equal to ";
         System.out.print("1-7: ");
         int[][] testData = {{1,2,3}, {4,5,6}, {7,8,9}};
         int[][] ans = {{7,4,1}, {8,5,2}, {9,6,3}};
@@ -224,7 +227,7 @@ public class ArraysStrings {
         ans = new int[][]{{13,9,5,1}, {14,10,6,2}, {15,11,7,3}, {16,12,8,4}};
         rotateMatrix(testData);
         assert Arrays.deepEquals(testData, ans) : Arrays.deepToString(testData) + EQL_STR + Arrays.deepToString(ans);
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
         System.out.print("1-8: ");
         testData = new int[][]{{0,2,3}, {4,5,6}};
@@ -239,11 +242,11 @@ public class ArraysStrings {
         ans = new int[][]{{0,0,0,0,0}, {0,7,0,9,10}, {0,0,0,0,0}};
         zeroMatrix(testData);
         assert Arrays.deepEquals(testData, ans) : Arrays.deepToString(testData) + EQL_STR + Arrays.deepToString(ans);
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
         System.out.print("1-9: ");
         assert isStringRotation("waterbottle", "erbottlewat") : "'watterbottle' is a rotation of 'erbottlewat'";
         assert !isStringRotation("waterbottl", "erbottlewa") : "'watterbottl' is not a rotation of 'erbottlewa'";
-        System.out.println("OK!");
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
