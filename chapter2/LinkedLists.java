@@ -234,6 +234,42 @@ class List<T extends Comparable<T>>  {
         return ans;
     }
 
+    /* 2-6 */
+    public boolean isPalindrome() {
+        java.util.Stack<T> stack = new java.util.Stack<>(); // Can also use the insert method from 2-5 to reverse list
+
+        Node<T> n1 = head, n2 = head;
+        for (; n2 != null && n2.next != null; n1 = n1.next, n2 = n2.next.next) stack.push(n1.data);
+        if (n2 != null) n1 = n1.next; // Skip middle on odd number of element
+
+        for (Node<T> n = n1; n != null; n = n.next)
+            if (!stack.pop().equals(n.data)) return false;
+        return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Node<Boolean> isPalindromeRecursiveHelper(Node<T> head, int length) {
+        Node<Boolean> n = new Node<>(true);
+        if (head == null || length <= 0) {
+            n.next = (Node<Boolean>) head;
+            return n;
+        } else if (length == 1) {
+            n.next = (Node<Boolean>) head.next;
+            return n;
+        }
+
+        n = isPalindromeRecursiveHelper(head.next, length-2);
+        if (Boolean.FALSE.equals(n.data) || n.next == null) return n;
+
+        n.data = head.data.equals(n.next.data);
+        n.next = n.next.next;
+        return n;
+    }
+
+    public boolean isPalindromeRecursive() {
+        return isPalindromeRecursiveHelper(head, length(this)).data;
+    }
+
     @Override
     public String toString() {
         if (head == null) return "[]";
@@ -321,6 +357,29 @@ public class LinkedLists {
         intList = List.addFromTail(new List<>(java.util.Arrays.asList(7, 1, 6)),
                                    new List<>(java.util.Arrays.asList(3, 1, 5, 9, 2)));
         assert intList.toString().equals("[3, 2, 3, 0, 8]") : intList + " Add from tail: 716 + 31592 = 32308";
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("2-6: ");
+        charList = new List<>(java.util.Arrays.asList('r', 'a', 'c', 'e', 'c', 'a', 'r'));
+        assert charList.isPalindrome() : charList + " ['r', 'a', 'c', 'e', 'c', 'a', 'r'] is a palindrome";
+        charList = new List<>(java.util.Arrays.asList('a', 'c', 'a'));
+        assert charList.isPalindrome() : charList + " ['a', 'c', 'a'] is a palindrome";
+        charList = new List<>(java.util.Arrays.asList('a', 'c', 'b'));
+        assert !charList.isPalindrome() : charList + " ['a', 'c', 'b'] is not a palindrome";
+        charList = new List<>(java.util.Arrays.asList('c', 'c'));
+        assert charList.isPalindrome() : charList + " ['c', 'c'] is a palindrome";
+        charList = new List<>(java.util.Arrays.asList('r', 'a', 'c', 'e', 'c', 'a'));
+        assert !charList.isPalindrome() : charList + " ['r', 'a', 'c', 'e', 'c', 'a'] is not a palindrome";
+        charList = new List<>(java.util.Arrays.asList('r', 'a', 'c', 'e', 'c', 'a', 'r'));
+        assert charList.isPalindromeRecursive() : charList + " Recursive: ['r', 'a', 'c', 'e', 'c', 'a', 'r'] is a palindrome";
+        charList = new List<>(java.util.Arrays.asList('a', 'c', 'a'));
+        assert charList.isPalindromeRecursive() : charList + " Recursive: ['a', 'c', 'a'] is a palindrome";
+        charList = new List<>(java.util.Arrays.asList('a', 'c', 'b'));
+        assert !charList.isPalindromeRecursive() : charList + " Recursive: ['a', 'c', 'b'] is not a palindrome";
+        charList = new List<>(java.util.Arrays.asList('c', 'c'));
+        assert charList.isPalindromeRecursive() : charList + " Recursive: ['c', 'c'] is a palindrome";
+        charList = new List<>(java.util.Arrays.asList('r', 'a', 'c', 'e', 'c', 'a'));
+        assert !charList.isPalindromeRecursive() : charList + " Recursive: ['r', 'a', 'c', 'e', 'c', 'a'] is not a palindrome";
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
