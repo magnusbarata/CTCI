@@ -1,17 +1,17 @@
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-final class Node<T> {
-    Node<T> next;
-    T data;
-
-    public Node(T d) {
-        data = d;
-    }
-}
-
 class List<T extends Comparable<T>>  {
     private Node<T> head;
+
+    static final class Node<T> {
+        Node<T> next;
+        T data;
+    
+        public Node(T d) {
+            data = d;
+        }
+    }
 
     public List() {}
 
@@ -166,6 +166,73 @@ class List<T extends Comparable<T>>  {
         }
     }
 
+    /* 2-5 */
+    public static List<Integer> addFromHead(List<Integer> op1, List<Integer> op2) {
+        List<Integer> ans = new List<>();
+        boolean carry = false;
+
+        Node<Integer> opPtr1 = op1.head, opPtr2 = op2.head;
+        for (int tmp = 0; opPtr1 != null || opPtr2 != null; tmp = 0) {
+            if (opPtr1 != null) {
+                tmp += opPtr1.data;
+                opPtr1 = opPtr1.next;
+            }
+            if (opPtr2 != null) {
+                tmp += opPtr2.data;
+                opPtr2 = opPtr2.next;
+            }
+
+            if (carry) tmp += 1;
+            if (tmp > 9) {
+                carry = true;
+                ans.append(tmp % 10);
+            } else {
+                carry = false;
+                ans.append(tmp);
+            }
+        }
+
+        if (carry) ans.append(1);
+        return ans;
+    }
+
+    public void insert(T d) {
+        Node<T> n = new Node<>(d);
+        if (head != null) n.next = head;
+        head = n;
+    }
+
+    public static <T extends Comparable<T>> int length(List<T> l) {
+        int len = 0;
+        for (Node<T> n = l.head; n != null; n = n.next) len++;
+        return len;
+    }
+
+    private static void padZero(List<Integer> l, int n) {
+        for (int i = 0; i < n; i++) l.insert(0);
+    }
+
+    public static boolean addFromTailHelper(List<Integer> ans, Node<Integer> op1, Node<Integer> op2) {
+        if (op1 == null && op2 == null) return false;
+        boolean carry = addFromTailHelper(ans, op1.next, op2.next);
+
+        int tmp = carry ? 1 : 0;
+        tmp += op1.data + op2.data;
+        ans.insert(tmp % 10);
+
+        return tmp > 9;
+    }
+
+    public static List<Integer> addFromTail(List<Integer> op1, List<Integer> op2) {
+        int len1 = length(op1), len2 = length(op2);
+        if (len1 < len2) padZero(op1, len2 - len1);
+        else padZero(op2, len1 - len2);
+        
+        List<Integer> ans = new List<>();
+        boolean carry = addFromTailHelper(ans, op1.head, op2.head);
+        if (carry) ans.insert(1);
+        return ans;
+    }
 
     @Override
     public String toString() {
@@ -233,6 +300,27 @@ public class LinkedLists {
         assert intList.toString().equals("[1, 2, 3, 5, 8, 5, 10]") : intList + " List must be: [1, 2, 3, 5, 8, 5, 10]";
         intList.partition(10);
         assert intList.toString().equals("[5, 8, 5, 3, 2, 1, 10]") : intList + " List must be: [5, 8, 5, 3, 2, 1, 10]";
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("2-5: ");
+        intList = List.addFromHead(new List<>(java.util.Arrays.asList(7, 1, 6)),
+                                   new List<>(java.util.Arrays.asList(5, 9, 2)));
+        assert intList.toString().equals("[2, 1, 9]") : intList + " Add from head: 617 + 295 = 912";
+        intList = List.addFromHead(new List<>(java.util.Arrays.asList(9, 7, 8)),
+                                   new List<>(java.util.Arrays.asList(6, 8, 5)));
+        assert intList.toString().equals("[5, 6, 4, 1]") : intList + " Add from head: 879 + 586 = 1465";
+        intList = List.addFromHead(new List<>(java.util.Arrays.asList(6, 1, 7)),
+                                   new List<>(java.util.Arrays.asList(2, 9, 5, 1, 3)));
+        assert intList.toString().equals("[8, 0, 3, 2, 3]") : intList + " Add from head: 716 + 31592 = 32308";
+        intList = List.addFromTail(new List<>(java.util.Arrays.asList(6, 1, 7)),
+                                   new List<>(java.util.Arrays.asList(2, 9, 5)));
+        assert intList.toString().equals("[9, 1, 2]") : intList + " Add from tail: 617 + 295 = 912";
+        intList = List.addFromTail(new List<>(java.util.Arrays.asList(8, 7, 9)),
+                                   new List<>(java.util.Arrays.asList(5, 8, 6)));
+        assert intList.toString().equals("[1, 4, 6, 5]") : intList + " Add from tail: 879 + 586 = 1465";
+        intList = List.addFromTail(new List<>(java.util.Arrays.asList(7, 1, 6)),
+                                   new List<>(java.util.Arrays.asList(3, 1, 5, 9, 2)));
+        assert intList.toString().equals("[3, 2, 3, 0, 8]") : intList + " Add from tail: 716 + 31592 = 32308";
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
