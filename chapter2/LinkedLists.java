@@ -19,6 +19,10 @@ class List<T extends Comparable<T>>  {
         append(ds);
     }
 
+    public Node<T> getHead() {
+        return head;
+    }
+
     public void append(Collection<? extends T> ds) {
         for (T d: ds) append(d);
     }
@@ -35,11 +39,22 @@ class List<T extends Comparable<T>>  {
         }
     }
 
-    public Node<T> getNode(T d) {
-        if (head == null) throw new NoSuchElementException();
-        for (Node<T> n = head; n != null; n = n.next)
-            if (n.data.equals(d)) return n;
-        throw new NoSuchElementException();
+    public void append(List<T> l) {
+        if (head == null) {
+            head = l.head;
+        } else {
+            Node<T> n = head;
+            for (; n.next != null; n = n.next);
+            n.next = l.head;
+        }
+    }
+
+    public Node<T> getNode(int idx) {
+        if (idx < 0) throw new NoSuchElementException();
+        Node<T> n = head;
+        for (; idx > 0 && n != null; idx--, n = n.next);
+        if (n == null) throw new NoSuchElementException();
+        return n;
     }
 
     public void remove(T d) {
@@ -270,6 +285,36 @@ class List<T extends Comparable<T>>  {
         return isPalindromeRecursiveHelper(head, length(this)).data;
     }
 
+    /* 2-7 */
+    public static <T extends Comparable<T>> Node<T> findIntersection(List<T> l1, List<T> l2) {
+        if (l1.head == null || l2.head == null) return null;
+
+        int len1 = 1, len2 = 1;
+        Node<T> n1, n2;
+        for (n1 = l1.head; n1.next != null; n1 = n1.next) len1++;
+        for (n2 = l2.head; n2.next != null; n2 = n2.next) len2++;
+        if (n1 != n2) return null;
+
+        n1 = len1 > len2 ? l1.getNode(len1-len2) : l1.head;
+        n2 = len1 > len2 ? l2.head : l2.getNode(len2-len1);
+        for (; n1 != n2; n1 = n1.next, n2 = n2.next);
+        return n1;
+    }
+
+    /* 2-8 */
+    public Node<T> detectLoop() {
+        Node<T> p1 = head, p2 = head;
+        for (; p2 != null && p2.next != null;) {
+            p1 = p1.next;
+            p2 = p2.next.next;
+            if (p1 == p2) break;
+        }
+
+        if (p2 == null || p2.next == null) return null;
+        for (p1 = head; p1 != p2; p1 = p1.next, p2 = p2.next);
+        return p1;
+    }
+
     @Override
     public String toString() {
         if (head == null) return "[]";
@@ -320,7 +365,7 @@ public class LinkedLists {
 
         System.out.print("2-3: ");
         List<Character> charList = new List<>(java.util.Arrays.asList('a', 'b', 'c', 'd', 'e', 'f'));
-        charList.delMiddle(charList.getNode('c'));
+        charList.delMiddle(charList.getNode(2));
         assert charList.toString().equals("[a, b, d, e, f]") : charList + " List must be: [a, b, d, e, f]";
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
 
@@ -380,6 +425,37 @@ public class LinkedLists {
         assert charList.isPalindromeRecursive() : charList + " Recursive: ['c', 'c'] is a palindrome";
         charList = new List<>(java.util.Arrays.asList('r', 'a', 'c', 'e', 'c', 'a'));
         assert !charList.isPalindromeRecursive() : charList + " Recursive: ['r', 'a', 'c', 'e', 'c', 'a'] is not a palindrome";
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("2-7: ");
+        List<Integer> l1 = new List<>(java.util.Arrays.asList(1, 4, 2));
+        List<Integer> l2 = new List<>(java.util.Arrays.asList(2));
+        assert List.findIntersection(l1, intList) == null : l1 + " and " + intList + " does not intersect";
+        l1.append(intList);
+        assert List.findIntersection(l1, intList) == intList.getHead() : l1 + " and " + intList + " intersect";
+        assert List.findIntersection(l1, l2) == null : l1 + " and " + l2 + " does not intersect";
+        l2.append(intList);
+        assert List.findIntersection(l1, intList) == intList.getHead() : l1 + " and " + intList + " intersect";
+        assert List.findIntersection(l1, l2) == intList.getHead() : l1 + " and " + l2 + " intersect";
+        intList = new List<>(java.util.Arrays.asList(7, 2, 1));
+        l1 = new List<>(java.util.Arrays.asList(3, 1, 5, 9));
+        l2 = new List<>(java.util.Arrays.asList(4, 6));
+        l1.append(intList);
+        l2.append(intList);
+        assert List.findIntersection(l1, l2) == intList.getHead() : l1 + " and " + l2 + " intersect";
+        l1 = new List<>(java.util.Arrays.asList(3, 1, 5, 9, 7, 2, 1));
+        l2 = new List<>(java.util.Arrays.asList(4, 6, 7, 2, 1));
+        assert List.findIntersection(l1, l2) == null : l1 + " and " + l2 + " does not intersect";
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+        
+        System.out.print("2-8: ");
+        assert charList.detectLoop() == null : "charList does not contain loop";
+        charList = new List<>(java.util.Arrays.asList('A', 'B'));
+        List<Character> c = new List<>(java.util.Arrays.asList('C'));
+        charList.append(c);
+        charList.append(new List<>(java.util.Arrays.asList('D', 'E')));
+        charList.append(c);
+        assert charList.detectLoop() == c.getHead() : "charList contains loop";
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
