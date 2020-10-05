@@ -320,8 +320,7 @@ class List<T extends Comparable<T>>  {
         if (head == null) return "[]";
 
         StringBuilder sb = new StringBuilder();
-        Node<T> n = head;
-        for (; n != null; n = n.next)
+        for (Node<T> n = head; n != null; n = n.next)
             sb.append(n.data.toString() + ", ");
         return "[" + sb.substring(0, sb.length()-2) + "]";
     }
