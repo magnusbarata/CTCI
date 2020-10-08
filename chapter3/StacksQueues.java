@@ -29,5 +29,14 @@ public class StacksQueues {
         stackMin.pop(); stackMin.pop();
         assert stackMin.min() == 2 : "Minimum is 2";
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("3-3: ");
+        SetOfStacks<Integer> stackSet = new SetOfStacks<>(3);
+        for (int i = 0; i < 10; i++) stackSet.push(i);
+        stackSet.pop(); stackSet.pop();
+        assert stackSet.toString().equals("[[2, 1, 0], [5, 4, 3], [7, 6]]") : "pop() implementation is not correct";
+        stackSet.popAt(0); stackSet.popAt(1); stackSet.pop();
+        assert stackSet.toString().equals("[[3, 1, 0], [5, 4]]") : "popAt() implementation is not correct";
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }

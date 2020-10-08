@@ -1,7 +1,7 @@
 import java.util.EmptyStackException;
 
 public class Stack<T> {
-    private Node<T> top;
+    Node<T> top;
     
     public boolean isEmpty() { return top == null; }
 

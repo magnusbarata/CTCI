@@ -2,7 +2,7 @@
 import java.util.EmptyStackException;
 
 public class StackMin<T extends Comparable<T>> extends Stack<T> {
-    Stack<T> mins = new Stack<>();
+    private Stack<T> mins = new Stack<>();
 
     @Override
     public void push(T item) {
