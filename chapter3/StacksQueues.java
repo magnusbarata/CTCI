@@ -34,9 +34,26 @@ public class StacksQueues {
         SetOfStacks<Integer> stackSet = new SetOfStacks<>(3);
         for (int i = 0; i < 10; i++) stackSet.push(i);
         stackSet.pop(); stackSet.pop();
-        assert stackSet.toString().equals("[[2, 1, 0], [5, 4, 3], [7, 6]]") : "pop() implementation is not correct";
-        stackSet.popAt(0); stackSet.popAt(1); stackSet.pop();
-        assert stackSet.toString().equals("[[3, 1, 0], [5, 4]]") : "popAt() implementation is not correct";
+        assert stackSet.toString().equals("[[2, 1, 0], [5, 4, 3], [7, 6]]") : "pop() implementation is incorrect";
+        stackSet.popAt(0); stackSet.push(8); stackSet.popAt(1); stackSet.pop();
+        assert stackSet.toString().equals("[[3, 1, 0], [7, 5, 4]]") : "popAt() implementation is incorrect";
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("3-4: ");
+        Queue<Integer> queue = new Queue<>();
+        MyQueue<Integer> myQueue = new MyQueue<>();
+        for (int i = 0; i < 100; i++) {
+            double rand = Math.random();
+            if (rand < 0.5) {
+                queue.add(i);
+                myQueue.add(i);
+            } else if (!queue.isEmpty()) {
+                assert myQueue.isEmpty() == queue.isEmpty() : "isEmpty() implementation is incorrect";
+                assert myQueue.peek().equals(queue.peek()) : "MyQueue implementation is incorrect";
+                queue.remove();
+                myQueue.remove();
+            }
+        }
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
