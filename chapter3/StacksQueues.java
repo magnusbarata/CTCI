@@ -1,7 +1,69 @@
+import java.sql.Timestamp;
+
+/* 3-6 */
+abstract class Animal {
+    protected String name;
+    private Timestamp ts;
+
+    public Animal(String name) { this.name = name; }
+    public void setTs(Timestamp ts) { this.ts = ts; }
+    public Timestamp getTs() { return ts; }
+    public boolean isOlderThan(Animal a) { return this.ts.compareTo(a.ts) < 0; }
+    
+    @Override
+    public String toString() { return name; }
+}
+
+class Dog extends Animal {
+    public Dog(String name) { super(name); }
+}
+
+class Cat extends Animal {
+    public Cat(String name) { super(name); }
+}
+
+class AnimalShelter {
+    private Queue<Dog> dogs = new Queue<>();
+    private Queue<Cat> cats = new Queue<>();
+
+    public void deposit(Animal a) {
+        a.setTs(new Timestamp(System.currentTimeMillis()));
+        if (a instanceof Dog) dogs.add((Dog) a);
+        else if (a instanceof Cat) cats.add((Cat) a);
+    }
+
+    public Animal adoptAny() {
+        if (dogs.isEmpty() && cats.isEmpty()) throw new java.util.NoSuchElementException();
+        else if (dogs.isEmpty()) return adoptCat();
+        else if (cats.isEmpty()) return adoptDog();
+        else return dogs.peek().isOlderThan(cats.peek()) ? adoptDog() : adoptCat();
+    }
+
+    public Dog adoptDog() { return dogs.remove(); }
+    public Cat adoptCat() { return cats.remove(); }
+
+    public Queue<Cat> getCats() { return cats; }
+    public Queue<Dog> getDogs() { return dogs; }
+}
+
 public class StacksQueues {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_GREEN = "\u001B[32m";
 
+    /* 3-5 */
+    public static <T extends Comparable<T>> void sort(Stack<T> s) {
+        if (s.isEmpty()) return;
+        Stack<T> aux = new Stack<>();
+        while(!s.isEmpty()) {
+            T temp = s.pop();
+            while(!aux.isEmpty() && temp.compareTo(aux.peek()) < 0)
+                s.push(aux.pop());
+            aux.push(temp);
+        }
+        
+        while (!aux.isEmpty()) s.push(aux.pop());
+    }
+    
     public static void main(String[] args) throws Exception {
         System.out.print("3-1: ");
         MultiStack stacks = new MultiStack(3, 4);
@@ -54,6 +116,40 @@ public class StacksQueues {
                 myQueue.remove();
             }
         }
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("3-5: ");
+        Stack<Integer> intStack = new Stack<>();
+        int[] truth = new int[100];
+        for (int i = 0; i < 100; i++) {
+            int rand = (int)(Math.random() * 1000);
+            intStack.push(rand);
+            truth[i] = rand;
+        }
+        java.util.Arrays.sort(truth); sort(intStack);
+        for (int v: truth) assert intStack.pop() == v : "sort() implementation is incorrect";
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("3-6: ");
+        AnimalShelter shelter = new AnimalShelter();
+        shelter.deposit(new Cat("Callie"));
+		shelter.deposit(new Cat("Kiki"));
+		shelter.deposit(new Dog("Fido"));
+		shelter.deposit(new Dog("Dora"));
+		shelter.deposit(new Cat("Kari"));
+		shelter.deposit(new Dog("Dexter"));
+		shelter.deposit(new Dog("Dobo"));
+        shelter.deposit(new Cat("Copa"));
+        shelter.adoptAny();
+        shelter.deposit(new Dog("Dapa"));
+        assert shelter.adoptAny().name.equals("Kiki") : "adoptAny() implementation is incorrect";
+        shelter.deposit(new Cat("Kilo"));
+        assert shelter.adoptCat().name.equals("Kari") : "adoptCat() implementation is incorrect";
+        assert shelter.adoptDog().name.equals("Fido") : "adoptDog() implementation is incorrect";
+        assert shelter.getCats().toString().equals("[Copa, Kilo]") :
+               shelter.getCats() + " AnimalShelter implementation is incorrect";
+        assert shelter.getDogs().toString().equals("[Dora, Dexter, Dobo, Dapa]") :
+               shelter.getDogs() + " AnimalShelter implementation is incorrect";
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
