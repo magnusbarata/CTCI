@@ -73,9 +73,27 @@ public class TreesGraphs {
         assert !g.DFS(nodes[1], nodes[5]) : "(DFS) There is no route between node 1 and 5";
     }
 
+    private static void check2() {
+        Integer[] arr = {12, 15, 31, 45, 52, 61, 67, 68, 79, 80, 81, 92};
+        BinaryTree<Integer> minBST = BinaryTree.createMinBST(arr);
+        assert minBST.data == 61 : minBST.data + " minBST root must be mid value 61";
+        assert minBST.isBST() : "minBST must be a binary search tree";
+        assert minBST.height() == 4 : minBST.height() + " (Minimum height check) minBST height must be 4";
+        arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+        minBST = BinaryTree.createMinBST(arr);
+        assert minBST.data == 6 : minBST.data + " minBST root must be mid value 6";
+        assert minBST.isBST() : "minBST must be a binary search tree";
+        assert minBST.height() == 4 : minBST.height() + " (Minimum height check) minBST height must be 4";
+
+    }
+ 
     public static void main(String[] args) {
         System.out.print("4-1: ");
         check1();
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("4-2: ");
+        check2();
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
