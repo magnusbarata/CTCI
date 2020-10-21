@@ -84,7 +84,15 @@ public class TreesGraphs {
         assert minHeightBST.data == 6 : minHeightBST.data + " minHeightBST root must be mid value 6";
         assert BST.checkBST(minHeightBST) : "minHeightBST must be a binary search tree";
         assert minHeightBST.height() == 4 : minHeightBST.height() + " (Minimum height check) minHeightBST height must be 4";
+    }
 
+    private static void check3() {
+        Integer[] arr = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+        BinaryTree<Integer> root = BinaryTree.arrayToTree(arr);
+        ArrayList<ArrayList<BinaryTree<Integer>>> list = BinaryTree.listOfDepthsBFS(root);
+        assert java.util.Arrays.toString(list.toArray())
+                               .equals("[[1], [2, 3], [4, 5, 6, 7], [8, 9, 10, 11, 12, 13]]") : 
+                               "listOfDepthsBFS implementation is incorrect";
     }
  
     public static void main(String[] args) {
@@ -94,6 +102,10 @@ public class TreesGraphs {
 
         System.out.print("4-2: ");
         check2();
+        System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
+
+        System.out.print("4-3: ");
+        check3();
         System.out.println(ANSI_GREEN + "OK!" + ANSI_RESET);
     }
 }
