@@ -75,15 +75,15 @@ public class TreesGraphs {
 
     private static void check2() {
         Integer[] arr = {12, 15, 31, 45, 52, 61, 67, 68, 79, 80, 81, 92};
-        BinaryTree<Integer> minBST = BinaryTree.createMinBST(arr);
-        assert minBST.data == 61 : minBST.data + " minBST root must be mid value 61";
-        assert minBST.isBST() : "minBST must be a binary search tree";
-        assert minBST.height() == 4 : minBST.height() + " (Minimum height check) minBST height must be 4";
+        BST<Integer> minHeightBST = BST.createMinHeightBST(arr);
+        assert minHeightBST.data == 61 : minHeightBST.data + " minHeightBST root must be mid value 61";
+        assert BST.checkBST(minHeightBST) : "minHeightBST must be a binary search tree";
+        assert minHeightBST.height() == 4 : minHeightBST.height() + " (Minimum height check) minHeightBST height must be 4";
         arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
-        minBST = BinaryTree.createMinBST(arr);
-        assert minBST.data == 6 : minBST.data + " minBST root must be mid value 6";
-        assert minBST.isBST() : "minBST must be a binary search tree";
-        assert minBST.height() == 4 : minBST.height() + " (Minimum height check) minBST height must be 4";
+        minHeightBST = BST.createMinHeightBST(arr);
+        assert minHeightBST.data == 6 : minHeightBST.data + " minHeightBST root must be mid value 6";
+        assert BST.checkBST(minHeightBST) : "minHeightBST must be a binary search tree";
+        assert minHeightBST.height() == 4 : minHeightBST.height() + " (Minimum height check) minHeightBST height must be 4";
 
     }
  
